@@ -69,5 +69,4 @@ func _on_player_health_change(new_health: Variant) -> void:
 	
 
 func _on_main_game_over() -> void:
-	$GameText.visible = true
-	print("Show game over text")
+	print("Game over")
