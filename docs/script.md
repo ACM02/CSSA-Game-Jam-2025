@@ -14,9 +14,9 @@ The camera centers on the blob as WASD buttons appear above it, indicating the f
 
 > "I must push the boulder to the top."
 
-If the blob moves towards the boulder, the boulder is pushed in the direction the blob is pushing it from, assuming there is a grid square there. If the boulder is currently on an angled tile, it will roll down the slope until it settles on a flat tile, unless it is blocked by the blob or something else from rolling down said direction. Pushing the boulder drains the blob's stamina; if it runs out of stamina, it faints and returns to its starting position. Stamina recovers over time when the blob is not pushing against anything.
+If the blob moves towards the boulder, the boulder is pushed in the direction the blob is pushing it from, assuming there is space. If the boulder is currently on an angled tile, it will roll down the slope until it is on a flat tile, unless it is blocked by the blob or something else from rolling down said direction. Pushing the boulder drains the blob's stamina; if it runs out of stamina, it faints and returns to its starting position. Stamina recovers over time when the blob is not pushing against anything.
 
-The blob pushes the boulder up the three rows of sloped tiles by simply going forward. Settling on flat ground, it sees a new, bigger slope ahead; however, some tiles have trees on them, blocking the boulder. There is only one column the blob can pushes the boulder upwards to reach the next flat ground, as all the others have at least one tile with a tree on them.
+The blob pushes the boulder up the rows of sloped tiles by simply going forward. Settling on flat ground, it sees a new, bigger slope ahead; however, some tiles have trees on them, blocking the boulder. There is only one column the blob can pushes the boulder upwards to reach the next flat ground, as all the others have at least one tile with a tree on them.
 
 It has just enough stamina to reach the top of the slope, where it is met with a flowing river. With nowhere else to go but up, it continues onwards and gets swallowed by the river as the screen fades to black.
 
