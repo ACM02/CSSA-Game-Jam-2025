@@ -18,7 +18,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func play_narrative_sequence(text_content: String, duration: float = 5.0):
+func play_narrative_sequence(text_content: String, duration: float = 3.0):
 	narrative_layer.visible = true
 	narrative_label.text = text_content
 	
