@@ -8,6 +8,9 @@ signal transition_finished
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	# Ensure HUD keeps running on pause
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	# On game start, begin with the screen for introduction
 	narrative_label.modulate.a = 0.0
 	black_screen.modulate.a = 1.0
@@ -18,8 +21,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func play_narrative_sequence(text_content: Array, duration: float = 3.0) -> void:
+func play_narrative_sequence(text_content: Array, duration: float = 3.0,
+callback: Callable = Callable()) -> void:
+	# Freeze the game
+	get_tree().paused = true
+	
 	narrative_layer.visible = true
+	narrative_label.modulate.a = 0.0
 	
 	var tween = create_tween()
 	
@@ -36,11 +44,18 @@ func play_narrative_sequence(text_content: Array, duration: float = 3.0) -> void
 		tween.tween_interval(duration)
 		# Fade out text
 		tween.tween_property(narrative_label, "modulate:a", 0.0, 1.0)
-		
+	
+	# Execute callback logic to update game state
+	if callback.is_valid():
+		tween.tween_callback(callback)
+	
+	# Unpause game state on overworld fade-in
+	tween.tween_callback(func(): get_tree().paused = false)
+	
 	# Fade out black
 	tween.tween_property(black_screen, "modulate:a", 0.0, 2.0)
 	
-	# 6. Callback when done
+	# Callback when done
 	tween.tween_callback(_on_sequence_complete)
 	
 	

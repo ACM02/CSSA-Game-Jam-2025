@@ -20,8 +20,12 @@ func _on_player_death() -> void:
 #	Move player to start
 # 	Reset health
 #	Reset enemies?
+	var respawn_logic = func():
+		$Player.health = 100
+		$Player.emit_signal("health_change", 100)
+
 	$HUD.play_narrative_sequence(["I drowned in my sorrows.\nMy lungs suffocate the way they always have."
-	, "But I must push the boulder to the top."])
+	, "But I must push the boulder to the top."], 3.0, respawn_logic)
 	await $HUD.transition_finished
 
 	print("Game over!")
