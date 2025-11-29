@@ -4,7 +4,11 @@ signal game_over
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	pass # Replace with function body.
+	# Play intro sequence
+	$HUD.play_narrative_sequence(["One must imagine Sisyphus happy."])
+	
+	# Wait for the HUD to signal that the text is finished
+	await $HUD.transition_finished
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -16,5 +20,13 @@ func _on_player_death() -> void:
 #	Move player to start
 # 	Reset health
 #	Reset enemies?
+	var respawn_logic = func():
+		$Player.health = 100
+		$Player.emit_signal("health_change", 100)
+
+	$HUD.play_narrative_sequence(["I drowned in my sorrows.\nMy lungs suffocate the way they always have."
+	, "But I must push the boulder to the top."], 3.0, respawn_logic)
+	await $HUD.transition_finished
+
 	print("Game over!")
 	game_over.emit()
