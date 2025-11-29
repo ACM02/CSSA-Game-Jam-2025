@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bgynqnydkh1xc"]
+
+[ext_resource type="Script" uid="uid://yuo820guggeu" path="res://scripts/physics_entity.gd" id="1_hmoqv"]
+[ext_resource type="Texture2D" uid="uid://1xw3w6yx1i2u" path="res://icon.svg" id="1_um84r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hmoqv"]
+size = Vector2(30.000006, 35.000004)
+
+[node name="PhysicsEntity" type="CharacterBody2D"]
+script = ExtResource("1_hmoqv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_hmoqv")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_um84r")
