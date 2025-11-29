@@ -18,25 +18,26 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func play_narrative_sequence(text_content: String, duration: float = 3.0):
+func play_narrative_sequence(text_content: Array, duration: float = 3.0) -> void:
 	narrative_layer.visible = true
-	narrative_label.text = text_content
 	
 	var tween = create_tween()
 	
-	# 1. Fade in black
+	# Fade in black
 	tween.tween_property(black_screen, "modulate:a", 1.0, 0.5)
 	
-	# 2. Fade in text
-	tween.tween_property(narrative_label, "modulate:a", 1.0, 1.0)
-	
-	# 3. Wait for reading time
-	tween.tween_interval(duration)
-	
-	# 4. Fade out text
-	tween.tween_property(narrative_label, "modulate:a", 0.0, 1.0)
-	
-	# 5. Fade out black
+	# Loop over every text
+	for text in text_content:
+		# Set next text as part of tween sequence
+		tween.tween_callback(func(): narrative_label.text = text)
+		# Fade in text
+		tween.tween_property(narrative_label, "modulate:a", 1.0, 1.0)
+		# Wait for reading time
+		tween.tween_interval(duration)
+		# Fade out text
+		tween.tween_property(narrative_label, "modulate:a", 0.0, 1.0)
+		
+	# Fade out black
 	tween.tween_property(black_screen, "modulate:a", 0.0, 2.0)
 	
 	# 6. Callback when done
