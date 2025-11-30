@@ -79,9 +79,13 @@ func _physics_process(delta):
 		# Slowly move the sprite down relative to the collision shape
 		$Sprite2D.position.y += 10 * delta
 
-		# MECHANIC: Pull player to the center of the tile so they don't drift out
-		var tile_center = ground_tilemap.map_to_local(currTile())
-		var direction_to_center = (tile_center - global_position).normalized()
+		# MECHANIC: Pull player to the center
+		# 1. Get local center of tile
+		var tile_center_local = ground_tilemap.map_to_local(currTile())
+		# 2. Convert to global space to match player's global_position
+		var tile_center_global = ground_tilemap.to_global(tile_center_local)
+
+		var direction_to_center = (tile_center_global - global_position).normalized()
 		motion = direction_to_center * 10 * delta
 	
 	# Reset pushing state for this frame; it will be set true in try_move if we push
@@ -205,6 +209,10 @@ func spawn(point):
 	stamina = max_stamina
 	health_change.emit(health)
 	stamina_change.emit(stamina, false)
+	
+	drowning = false
+	$DrowningTimer.stop()
+	$Sprite2D.position = Vector2.ZERO # Reset the sinking visual effect
 
 func _on_drowning_timer_timeout() -> void:
 	death.emit(DEATH_TYPE.DROWNING)
