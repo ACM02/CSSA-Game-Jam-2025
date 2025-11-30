@@ -22,7 +22,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	pass
 
-func play_narrative_sequence(text_content: Array, duration: float = 3.0,
+func play_narrative_sequence(text_content: Array, duration: float = 1.0,
 callback: Callable = Callable()) -> void:
 	# Freeze the game
 	get_tree().paused = true
