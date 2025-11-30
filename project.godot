@@ -14,3 +14,7 @@ config/name="CSSA Game Jam"
 run/main_scene="uid://ix3c38h4e6xy"
 config/features=PackedStringArray("4.5", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+AudioPlayer="*res://scenes/audio_player.tscn"

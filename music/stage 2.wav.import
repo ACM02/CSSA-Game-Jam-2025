@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://dwklubjg5uq1p"
+path="res://.godot/imported/stage 2.wav-40c0fa4cf4b6bb124e6314a95c9fdffd.sample"
+
+[deps]
+
+source_file="res://music/stage 2.wav"
+dest_files=["res://.godot/imported/stage 2.wav-40c0fa4cf4b6bb124e6314a95c9fdffd.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=2
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
