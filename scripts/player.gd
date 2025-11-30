@@ -30,7 +30,7 @@ extends "physics_entity.gd"
 @onready var RIGHT_BACK = BLOB_RIGHT_BACK
 @onready var DEAD = BLOB_DEAD
 
-var speed = 50
+var speed = 100
 var isFrontFacing = true
 var isRightFacing = false
 
@@ -210,9 +210,12 @@ func try_move(motion: Vector2, delta: float):
 		var collider = collision.get_collider()
 
 		if collider is Boudler:
-			if collider.try_push(motion):
+			# Override speed for pushing: Fixed at 50 px/s (Scale 1)
+			var push_velocity = motion.normalized() * 50.0 * delta
+			
+			if collider.try_push(push_velocity):
 				is_pushing = true
-				translate(motion)
+				translate(push_velocity)
 				
 				# Drain stamina
 				stamina -= stamina_drain_rate * delta
@@ -304,12 +307,14 @@ func apply_phase_traits():
 			can_drown_in_water = false 
 			AFFECTED_BY_MUD_STUCK = false # Can move
 			AFFECTED_BY_MUD_SLOW = true   # But slowed
+			mud_time_limit = 10.0         # Survives longer in mud
 			print("Form: Frog/Lizard (Resists water, Slowed in mud)")
 			
 		PHASES.primate:
 			can_drown_in_water = false
 			AFFECTED_BY_MUD_STUCK = false
 			AFFECTED_BY_MUD_SLOW = true
+			mud_time_limit = 10.0
 			print("Form: Primate")
 
 

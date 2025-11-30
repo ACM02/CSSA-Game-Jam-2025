@@ -128,8 +128,13 @@ func _on_player_death_with_reason(reason: int) -> void:
 		
 		if should_evolve:
 			player.evolve()
+			# Apply global changes for boulder based on new phase
+			if player.phase >= player.PHASES.lizard:
+				$Boulder.mud_time_limit = 10.0
+			else:
+				$Boulder.mud_time_limit = 5.0
 
-	hud.play_narrative_sequence(narrative_lines, 1.0, respawn_logic)
+	hud.play_narrative_sequence(narrative_lines, narrative_lines.size(), respawn_logic)
 	await hud.transition_finished
 
 	# Check for endgame state
