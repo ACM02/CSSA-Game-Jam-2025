@@ -10,7 +10,7 @@ var isLunging = false
 var lungePoint = null
 var player: Node2D
 
-const ATTACK_CHARGE_TIME = 3
+const ATTACK_CHARGE_TIME = 2
 const LUNGE_POSITION_DESCISION_TIME = 1
 
 func _ready():
