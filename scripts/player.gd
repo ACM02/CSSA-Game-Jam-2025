@@ -272,6 +272,7 @@ func apply_new_textures():
 			LEFT_BACK = PRIMATE_LEFT_BACK
 			RIGHT = PRIMATE_RIGHT
 			RIGHT_BACK = PRIMATE_RIGHT_BACK
+	update_sprite_direction(Vector2(1,1))
 
 func apply_phase_traits():
 	# Reset defaults

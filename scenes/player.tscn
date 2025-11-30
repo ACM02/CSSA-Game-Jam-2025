@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://ctvobuea5vyg5"]
+[gd_scene load_steps=20 format=3 uid="uid://ctvobuea5vyg5"]
 
 [ext_resource type="PackedScene" uid="uid://bgynqnydkh1xc" path="res://scenes/physics_entity.tscn" id="1_33152"]
 [ext_resource type="Script" uid="uid://hsc14irrcpxg" path="res://scripts/player.gd" id="2_dm58q"]
@@ -6,6 +6,18 @@
 [ext_resource type="Texture2D" uid="uid://df77t563oirkb" path="res://player_sprites/blob_player_right.png" id="4_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://bvm088nlqjwjo" path="res://player_sprites/blob_player_left_back.png" id="5_fjrip"]
 [ext_resource type="Texture2D" uid="uid://dar14arvx54no" path="res://player_sprites/blob_player_right_back.png" id="6_smehm"]
+[ext_resource type="Texture2D" uid="uid://diphrb58dj74u" path="res://player_sprites/fish_left.png" id="7_fulsm"]
+[ext_resource type="Texture2D" uid="uid://cycmo6htikriv" path="res://player_sprites/fish_right.png" id="8_4r5pv"]
+[ext_resource type="Texture2D" uid="uid://cdakw13xp54oc" path="res://player_sprites/fish_left_back.png" id="9_60mlk"]
+[ext_resource type="Texture2D" uid="uid://ck4ugub46wuta" path="res://player_sprites/fish_right_back.png" id="10_i4ail"]
+[ext_resource type="Texture2D" uid="uid://bp7oq8hkmv3yu" path="res://player_sprites/frob.sw.png" id="11_a38lo"]
+[ext_resource type="Texture2D" uid="uid://bviaxcbn6qxr3" path="res://player_sprites/frob.se.png" id="12_4ni07"]
+[ext_resource type="Texture2D" uid="uid://dsyrf2o7ip0io" path="res://player_sprites/frob.nw.png" id="13_l71n6"]
+[ext_resource type="Texture2D" uid="uid://cxnj1y16uewrt" path="res://player_sprites/frob.ne.png" id="14_ke2ow"]
+[ext_resource type="Texture2D" uid="uid://bc26pg071csp5" path="res://player_sprites/human.sw.png" id="15_ujl30"]
+[ext_resource type="Texture2D" uid="uid://cxrqhwwxiycek" path="res://player_sprites/human.se.png" id="16_31cv2"]
+[ext_resource type="Texture2D" uid="uid://byjn5ul6qguv8" path="res://player_sprites/human.nw.png" id="17_pf23h"]
+[ext_resource type="Texture2D" uid="uid://b23vt20jlkn7c" path="res://player_sprites/human.ne.png" id="18_dt7fs"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
 size = Vector2(22.000006, 21.000004)
@@ -17,18 +29,18 @@ BLOB_LEFT = ExtResource("3_tuyoq")
 BLOB_RIGHT = ExtResource("4_tuyoq")
 BLOB_LEFT_BACK = ExtResource("5_fjrip")
 BLOB_RIGHT_BACK = ExtResource("6_smehm")
-FISH_LEFT = null
-FISH_RIGHT = null
-FISH_LEFT_BACK = null
-FISH_RIGHT_BACK = null
-LIZARD_LEFT = null
-LIZARD_RIGHT = null
-LIZARD_LEFT_BACK = null
-LIZARD_RIGHT_BACK = null
-PRIMATE_LEFT = null
-PRIMATE_RIGHT = null
-PRIMATE_LEFT_BACK = null
-PRIMATE_RIGHT_BACK = null
+FISH_LEFT = ExtResource("7_fulsm")
+FISH_RIGHT = ExtResource("8_4r5pv")
+FISH_LEFT_BACK = ExtResource("9_60mlk")
+FISH_RIGHT_BACK = ExtResource("10_i4ail")
+LIZARD_LEFT = ExtResource("11_a38lo")
+LIZARD_RIGHT = ExtResource("12_4ni07")
+LIZARD_LEFT_BACK = ExtResource("13_l71n6")
+LIZARD_RIGHT_BACK = ExtResource("14_ke2ow")
+PRIMATE_LEFT = ExtResource("15_ujl30")
+PRIMATE_RIGHT = ExtResource("16_31cv2")
+PRIMATE_LEFT_BACK = ExtResource("17_pf23h")
+PRIMATE_RIGHT_BACK = ExtResource("18_dt7fs")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" parent="." index="0"]
