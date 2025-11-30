@@ -81,6 +81,9 @@ func evolve():
 	if (phase == PHASES.lizard):
 		AFFECTED_BY_MUD = false
 		mudCounter = 0
+		print("Became Lizard")
+	if (phase == PHASES.primate):
+		print("Became human")
 
 func spawn(point):
 	position = point
