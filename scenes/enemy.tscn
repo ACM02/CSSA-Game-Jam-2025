@@ -1,27 +1,28 @@
 [gd_scene load_steps=5 format=3 uid="uid://j5iadgoljdcm"]
 
-[ext_resource type="Texture2D" uid="uid://1xw3w6yx1i2u" path="res://icon.svg" id="1_7p1mj"]
 [ext_resource type="Script" uid="uid://civtk1ldpjdrp" path="res://scripts/enemy.gd" id="1_md0e3"]
+[ext_resource type="Texture2D" uid="uid://dyrjhmxf8h5jp" path="res://enemy_sprites/vulturewait.ne.png" id="2_md0e3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_md0e3"]
-size = Vector2(86, 97)
+size = Vector2(26, 29)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4ra3w"]
-size = Vector2(124, 122)
+size = Vector2(25, 28)
 
 [node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_md0e3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 0.5)
+position = Vector2(-1, -0.5)
 shape = SubResource("RectangleShape2D_md0e3")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_7p1mj")
+texture = ExtResource("2_md0e3")
 
 [node name="AttackHitbox" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackHitbox"]
+position = Vector2(-1.5, -1)
 shape = SubResource("RectangleShape2D_4ra3w")
 
 [node name="LungeActiveTimer" type="Timer" parent="."]
