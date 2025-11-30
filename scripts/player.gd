@@ -11,13 +11,13 @@ var stamina_regen_rate = 15.0
 var is_pushing: bool = false
 
 signal health_change(new_health)
-signal stamina_change(new_stamina)
+signal stamina_change(new_stamina, is_colliding)
 signal death
 
 func _ready() -> void:
 	super._ready()
 	health_change.emit(100)
-	stamina_change.emit(100)
+	stamina_change.emit(100, false)
 	AFFECTED_BY_RAMP=false
 
 func damage(amount: int):
@@ -53,12 +53,15 @@ func _physics_process(delta):
 	else:
 		# Check if touching boulder to prevent "cheese" (waiting against the rock)
 		if is_touching_boulder():
-			pass # Prevent regeneration
+			stamina_change.emit(stamina, true)
 		elif stamina < max_stamina:
 			stamina += stamina_regen_rate * delta
 			if stamina > max_stamina:
 				stamina = max_stamina
-			stamina_change.emit(stamina)
+			stamina_change.emit(stamina, false)
+		else:
+			# Ensure green
+			stamina_change.emit(stamina, false)
 
 func try_move(motion: Vector2, delta: float):
 	#print("Trying to move: " + str(motion))
@@ -74,7 +77,7 @@ func try_move(motion: Vector2, delta: float):
 				
 				# Drain stamina
 				stamina -= stamina_drain_rate * delta
-				stamina_change.emit(stamina)
+				stamina_change.emit(stamina, true)
 				
 				# If no stamina, death
 				if stamina <= 0:

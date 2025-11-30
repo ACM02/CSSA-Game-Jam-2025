@@ -25,7 +25,7 @@ func _on_player_death() -> void:
 		$Player.emit_signal("health_change", 100)
 		
 		$Player.stamina = $Player.max_stamina
-		$Player.emit_signal("stamina_change", $Player.max_stamina)
+		$Player.emit_signal("stamina_change", $Player.max_stamina, false)
 
 	$HUD.play_narrative_sequence(["I drowned in my sorrows.\nMy lungs suffocate the way they always have."
 	, "But I must push the boulder to the top."], 3.0, respawn_logic)

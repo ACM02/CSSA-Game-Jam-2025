@@ -65,8 +65,18 @@ func _on_sequence_complete() -> void:
 	emit_signal("transition_finished")
 
 
-func _on_player_stamina_change(new_stamina: Variant) -> void:
+func _on_player_stamina_change(new_stamina: float, is_colliding: bool) -> void:
 	stamina_bar.value = new_stamina
+	
+	# Retrieve the stylebox to change its color
+	var style_box = stamina_bar.get_theme_stylebox("fill")
+	
+	if new_stamina < 20.0:
+		style_box.bg_color = Color(0.9, 0.1, 0.1) # Red
+	elif is_colliding:
+		style_box.bg_color = Color(0.9, 0.9, 0.1) # Yellow
+	else:
+		style_box.bg_color = Color(0.2, 0.8, 0.2) # Green
 	
 
 func _on_main_game_over() -> void:
