@@ -205,7 +205,7 @@ y_sort_origin = 1
 [node name="HUD" parent="." instance=ExtResource("5_tbgi4")]
 
 [node name="Enemy" parent="." instance=ExtResource("7_o6xl0")]
-position = Vector2(107.66667, 212)
+position = Vector2(190.66669, 138.33333)
 scale = Vector2(0.20000002, 0.20000002)
 
 [node name="Boulder" parent="." instance=ExtResource("9_85g3d")]
