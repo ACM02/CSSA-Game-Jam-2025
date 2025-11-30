@@ -7,6 +7,8 @@ signal game_over
 @onready var start_point = $StartPoint
 
 var track_number = 0
+var current_player_spawn: Vector2
+var current_boulder_spawn: Vector2
 
 const tracks = [
 	preload("res://music/stage 1.wav"),
@@ -16,9 +18,13 @@ const tracks = [
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	current_player_spawn = start_point.position
+	# Default boulder location (from your original code)
+	current_boulder_spawn = Vector2(267, 33)
+
 	AudioPlayer.play_music(tracks[track_number], 2.0)
 	
-	player.spawn(start_point.position)
+	player.spawn(current_player_spawn)
 	
 	# Connect signals
 	player.mud_death.connect(func(): _on_player_death_with_reason(player.DEATH_TYPE.MUD))
@@ -54,6 +60,9 @@ func _on_player_death_with_reason(reason: int) -> void:
 				]
 				should_evolve = true
 				track_number = 1
+				
+				current_player_spawn = Vector2(623, -122)
+				current_boulder_spawn = Vector2(644, -137)
 			else:
 				narrative_lines = [
 					"I was too weak.",
@@ -122,8 +131,8 @@ func _on_player_death_with_reason(reason: int) -> void:
 		
 
 	var respawn_logic = func():
-		player.spawn(start_point.position)
-		$Boulder.position = Vector2(267, 33) 
+		player.spawn(current_player_spawn)
+		$Boulder.position = current_boulder_spawn 
 		$Boulder.mudCounter = 0
 		
 		if should_evolve:
