@@ -20,6 +20,9 @@ var RAMP_DIRECTION = Vector2(-1, 1).normalized()
 var RIVER_FLOW = Vector2(-1, 1).normalized()       # flowing down
 const RIVER_SPEED = 30                 # tweak as needed
 
+var AFFECTED_BY_WATER = true
+var AFFECTED_BY_RAMP = true
+
 func _ready() -> void:
 	ground_tilemap = get_tree().get_first_node_in_group("ground")
 
@@ -33,9 +36,9 @@ func get_physics_effects() -> Vector2:
 
 	if atlas == GROUND_ATLAS:
 		pass
-	elif atlas == WATER_ATLAS:
+	elif atlas == WATER_ATLAS && AFFECTED_BY_WATER:
 		effect_direction = RIVER_FLOW * RIVER_SPEED
-	elif atlas == RAMP_ATLAS:
+	elif atlas == RAMP_ATLAS && AFFECTED_BY_RAMP:
 		effect_direction = RAMP_DIRECTION * RAMP_SPEED
 	elif atlas == MUD_ATLAS:
 		pass

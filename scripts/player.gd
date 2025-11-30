@@ -9,6 +9,7 @@ signal death
 func _ready() -> void:
 	super._ready()
 	health_change.emit(100)
+	AFFECTED_BY_RAMP=false
 
 func damage(amount: int):
 	print("Player took " + str(amount) + " damage!")
@@ -39,12 +40,6 @@ func try_move(motion: Vector2):
 	if collision:
 		var collider = collision.get_collider()
 
-		if collider is Rock:
-			# attempt push
-			if collider.try_push(motion):
-				# move player again after push
-				translate(motion)
-				return
 		if collider is Boudler:
 			if collider.try_push(motion):
 				translate(motion)
