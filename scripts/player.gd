@@ -218,9 +218,7 @@ func apply_phase_traits():
 
 func spawn(point):
 	position = point
-	health = 100
 	stamina = max_stamina
-	health_change.emit(health)
 	stamina_change.emit(stamina, false)
 	
 	drowning = false
