@@ -57,7 +57,8 @@ func _physics_process(delta):
 	if can_drown_in_water and not drowning and isInWater():
 		drowning = true
 		$DrowningTimer.start()
-	elif not isInWater():
+	elif not isInWater() and not drowning: 
+		# Only reset if we naturally walked out, NOT if we are already dying
 		drowning = false
 		$DrowningTimer.stop()
 	
@@ -71,7 +72,17 @@ func _physics_process(delta):
 		var current_speed = speed * get_speed_multiplier()
 		motion = input_vec * current_speed * delta
 		
-	motion += (get_physics_effects() * delta)
+		# ONLY apply river/slope physics if we are NOT drowning
+		motion += (get_physics_effects() * delta)
+	else:
+		# VISUAL TRICK: Sinking effect
+		# Slowly move the sprite down relative to the collision shape
+		$Sprite2D.position.y += 10 * delta
+
+		# MECHANIC: Pull player to the center of the tile so they don't drift out
+		var tile_center = ground_tilemap.map_to_local(currTile())
+		var direction_to_center = (tile_center - global_position).normalized()
+		motion = direction_to_center * 10 * delta
 	
 	# Reset pushing state for this frame; it will be set true in try_move if we push
 	is_pushing = false
