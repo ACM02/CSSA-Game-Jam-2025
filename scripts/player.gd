@@ -69,7 +69,7 @@ enum DEATH_TYPE {
 
 func _ready() -> void:
 	super._ready()
-	stamina_change.emit(100, false)
+	stamina_change.emit(stamina, false)
 	AFFECTED_BY_RAMP=false
 	apply_phase_traits()
 
