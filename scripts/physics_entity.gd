@@ -2,19 +2,22 @@ class_name physics_entity
 extends CharacterBody2D
 
 signal mud_death
+signal void_death
 
 var ground_tilemap: TileMapLayer
 
 const GROUND_ATLAS = Vector2i(0, 0)
-const WATER_ATLAS = Vector2i(1, 0)
+const WATER_SE_ATLAS = Vector2i(1, 0)
 const RAMP_ATLAS = Vector2i(2, 0)
 const MUD_ATLAS = Vector2i(3, 0)
 const BORDER_ATLAS = Vector2i(4, 0)
+const WATER_NW_ATLAS = Vector2i(6, 0)
 
 const RAMP_SPEED = 50
 var RAMP_DIRECTION = Vector2(-1, 1).normalized()
 
-var RIVER_FLOW = Vector2(-1, 1).normalized()       # flowing down
+var FLOW_SE = Vector2(1, 0.5).normalized()
+var FLOW_NW = Vector2(-1, -0.5).normalized()
 const RIVER_SPEED = 30                 # tweak as needed
 
 const MUD_TIME_LIMIT = 5
@@ -73,8 +76,11 @@ func get_physics_effects() -> Vector2:
 
 	var effect_direction = Vector2.ZERO
 
-	if atlas == WATER_ATLAS && AFFECTED_BY_WATER:
-		effect_direction = RIVER_FLOW * RIVER_SPEED
+	if AFFECTED_BY_WATER:
+		if atlas == WATER_SE_ATLAS:
+			effect_direction = FLOW_SE * RIVER_SPEED
+		elif atlas == WATER_NW_ATLAS:
+			effect_direction = FLOW_NW * RIVER_SPEED
 	elif atlas == RAMP_ATLAS && AFFECTED_BY_RAMP:
 		effect_direction = RAMP_DIRECTION * RAMP_SPEED
 
@@ -91,9 +97,22 @@ func isInMud():
 	return currTile() == MUD_ATLAS
 	
 func isInWater():
-	return currTile() == WATER_ATLAS
+	var t = currTile()
+	return t == WATER_SE_ATLAS or t == WATER_NW_ATLAS
 
 func _physics_process(delta: float) -> void:
+	# --- VOID DEATH LOGIC ---
+	# Check if the tile under us actually exists. 
+	# get_cell_source_id returns -1 if the cell is empty (void).
+	var tile_pos = ground_tilemap.local_to_map(ground_tilemap.to_local(global_position))
+	var source_id = ground_tilemap.get_cell_source_id(tile_pos)
+	
+	if source_id == -1:
+		# We are off the map
+		emit_signal("void_death")
+		# Optional: Add a falling animation/tween here before resetting
+		return
+
 	if isInMud():
 		mudCounter += delta
 
