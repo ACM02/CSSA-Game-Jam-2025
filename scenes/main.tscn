@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bv0to3jes171v" path="res://scenes/HUD.tscn" id="5_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://cyokvgwt1skq0" path="res://scenes/lunge_point_effect.tscn" id="7_85g3d"]
 [ext_resource type="PackedScene" uid="uid://j5iadgoljdcm" path="res://scenes/enemy.tscn" id="7_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://btghoe5517c15" path="res://scenes/boulder.tscn" id="9_85g3d"]
+[ext_resource type="PackedScene" uid="uid://cckpb116c4pbg" path="res://scenes/boulder.tscn" id="9_85g3d"]
 [ext_resource type="PackedScene" uid="uid://ctvobuea5vyg5" path="res://scenes/player.tscn" id="10_choun"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0wfyh"]
@@ -221,6 +221,6 @@ position = Vector2(124.333336, 109.333336)
 
 [connection signal="game_over" from="." to="HUD" method="_on_main_game_over"]
 [connection signal="mud_death" from="Boulder" to="." method="_on_boulder_mud_death"]
-[connection signal="death" from="Player" to="." method="_on_player_death"]
+[connection signal="death" from="Player" to="." method="_on_player_death_with_reason"]
 [connection signal="mud_death" from="Player" to="." method="_on_player_mud_death"]
 [connection signal="stamina_change" from="Player" to="HUD" method="_on_player_stamina_change"]
