@@ -49,7 +49,7 @@ func _on_player_death_with_reason(reason: int) -> void:
 		player.PHASES.fish:
 			if reason == player.DEATH_TYPE.MUD:
 				narrative_lines = [
-					"I foundered into the mire.",
+					"I floundered into the mire.",
 					"My legs crumble under the weight of it all.",
 					"But I must push the boulder to the top."
 				]
