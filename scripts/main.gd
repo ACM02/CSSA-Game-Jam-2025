@@ -4,9 +4,9 @@ signal game_over
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	$Player.spawn($StartPoint.position)
 	# Play intro sequence
 	$HUD.play_narrative_sequence(["One must imagine Sisyphus happy."])
-	
 	# Wait for the HUD to signal that the text is finished
 	await $HUD.transition_finished
 
@@ -23,7 +23,8 @@ func _on_player_death() -> void:
 	var respawn_logic = func():
 		$Player.health = 100
 		$Player.emit_signal("health_change", 100)
-		
+		$Player.evolve()
+
 		$Player.stamina = $Player.max_stamina
 		$Player.emit_signal("stamina_change", $Player.max_stamina, false)
 
@@ -33,3 +34,10 @@ func _on_player_death() -> void:
 
 	print("Game over!")
 	game_over.emit()
+
+
+func _on_player_mud_death() -> void:
+	_on_player_death()
+
+func _on_boulder_mud_death() -> void:
+	_on_player_death()
