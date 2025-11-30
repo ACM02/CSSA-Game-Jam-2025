@@ -84,7 +84,9 @@ func _on_player_death_with_reason(reason: int) -> void:
 				]
 				should_evolve = true
 				track_number = 2
-				
+
+				current_player_spawn = Vector2(1030, -350)
+				current_boulder_spawn = Vector2(1051, -362)
 			else:
 				narrative_lines = [
 					"I was too weak.",

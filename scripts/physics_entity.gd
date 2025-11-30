@@ -6,12 +6,12 @@ signal void_death
 
 var ground_tilemap: TileMapLayer
 
-const GROUND_ATLAS = Vector2i(0, 0)
-const WATER_SE_ATLAS = Vector2i(1, 0)
-const RAMP_ATLAS = Vector2i(2, 0)
-const MUD_ATLAS = Vector2i(3, 0)
-const BORDER_ATLAS = Vector2i(4, 0)
-const WATER_NW_ATLAS = Vector2i(6, 0)
+const GROUND_ATLAS = Vector2i(0, 2)
+const WATER_SE_ATLAS = Vector2i(10, 8)
+const RAMP_ATLAS = Vector2i(0, 0)
+const MUD_ATLAS = Vector2i(1, 1)
+const BORDER_ATLAS = Vector2i(0, 5)
+const WATER_NW_ATLAS = Vector2i(0, 1)
 
 const RAMP_SPEED = 100
 var RAMP_DIRECTION = Vector2(-1, 1).normalized()
