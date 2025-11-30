@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://btghoe5517c15"]
+[gd_scene load_steps=5 format=3 uid="uid://btghoe5517c15"]
 
 [ext_resource type="PackedScene" uid="uid://bgynqnydkh1xc" path="res://scenes/physics_entity.tscn" id="1_475t6"]
 [ext_resource type="Script" uid="uid://djcnqmxvodvnh" path="res://scripts/boulder.gd" id="2_7lox5"]
 [ext_resource type="Texture2D" uid="uid://1ybtfq5b0sr2" path="res://sample tileset/separated images/tile_065.png" id="3_wye2t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wye2t"]
+size = Vector2(32, 38)
 
 [node name="Boulder" instance=ExtResource("1_475t6")]
 scale = Vector2(0.5, 0.5)
@@ -14,3 +17,9 @@ scale = Vector2(0.99999976, 0.99999976)
 
 [node name="Sprite2D" parent="." index="1"]
 texture = ExtResource("3_wye2t")
+
+[node name="BoulderHitBox" type="Area2D" parent="." index="2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BoulderHitBox" index="0"]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_wye2t")
