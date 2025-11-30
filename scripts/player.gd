@@ -1,6 +1,33 @@
 extends "physics_entity.gd"
 
+@export var BLOB_LEFT: Texture2D
+@export var BLOB_RIGHT: Texture2D
+@export var BLOB_LEFT_BACK: Texture2D
+@export var BLOB_RIGHT_BACK: Texture2D
+
+@export var FISH_LEFT: Texture2D
+@export var FISH_RIGHT: Texture2D
+@export var FISH_LEFT_BACK: Texture2D
+@export var FISH_RIGHT_BACK: Texture2D
+
+@export var LIZARD_LEFT: Texture2D
+@export var LIZARD_RIGHT: Texture2D
+@export var LIZARD_LEFT_BACK: Texture2D
+@export var LIZARD_RIGHT_BACK: Texture2D
+
+@export var PRIMATE_LEFT: Texture2D
+@export var PRIMATE_RIGHT: Texture2D
+@export var PRIMATE_LEFT_BACK: Texture2D
+@export var PRIMATE_RIGHT_BACK: Texture2D
+
+@onready var LEFT = BLOB_LEFT
+@onready var RIGHT = BLOB_RIGHT
+@onready var LEFT_BACK = BLOB_LEFT_BACK
+@onready var RIGHT_BACK = BLOB_RIGHT_BACK
+
 var speed = 50
+var isFrontFacing = true
+var isRightFacing = false
 
 # Stamina System
 var max_stamina: float = 100.0
@@ -72,6 +99,8 @@ func _physics_process(delta):
 			Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 		).normalized()
 		
+		update_sprite_direction(input_vec)
+		
 		# Apply Mud/Terrain Speed Multiplier
 		var current_speed = speed * get_speed_multiplier()
 		motion = input_vec * current_speed * delta
@@ -79,7 +108,7 @@ func _physics_process(delta):
 		# ONLY apply river/slope physics if we are NOT drowning
 		motion += (get_physics_effects() * delta)
 	else:
-		var sink_speed = 15.0 # How fast pixels disappear
+		var sink_speed = 5.0 # How fast pixels disappear
 
 		# Slowly move the sprite down relative to the collision shape
 		$Sprite2D.position.y += sink_speed * delta
@@ -126,6 +155,47 @@ func _physics_process(delta):
 		else:
 			# Ensure green
 			stamina_change.emit(stamina, false)
+
+func update_sprite_direction(input_vec: Vector2) -> void:
+	if input_vec == Vector2.ZERO:
+		return  # No movement, keep current texture
+
+	if input_vec.y != 0:
+		if input_vec.y < 0:
+			isFrontFacing = false
+		else:
+			isFrontFacing = true
+
+	if input_vec.x != 0:
+		if input_vec.x > 0:
+			isRightFacing = true
+		elif input_vec.x < 0:
+			isRightFacing = false
+		
+	if isRightFacing && isFrontFacing:
+		$Sprite2D.texture = RIGHT
+	elif isRightFacing && !isFrontFacing:
+		$Sprite2D.texture = RIGHT_BACK
+	elif !isRightFacing && isFrontFacing:
+		$Sprite2D.texture = LEFT
+	elif !isRightFacing && !isFrontFacing:
+		$Sprite2D.texture = LEFT_BACK
+
+
+	# Decide primary movement direction
+	#if abs(input_vec.x) > abs(input_vec.y):
+		## Horizontal
+		#if input_vec.x > 0:
+			#$Sprite2D.texture = RIGHT
+		#else:
+			#$Sprite2D.texture = LEFT
+	#else:
+		## Vertical
+		#if input_vec.y > 0:
+			#$Sprite2D.texture = RIGHT_BACK
+		#else:
+			#$Sprite2D.texture = LEFT_BACK
+
 
 func try_move(motion: Vector2, delta: float):
 	#print("Trying to move: " + str(motion))
@@ -183,7 +253,25 @@ func evolve():
 	if phase < PHASES.primate:
 		phase += 1
 		apply_phase_traits()
+		apply_new_textures()
 
+func apply_new_textures():
+	match phase:
+		PHASES.fish:
+			LEFT = FISH_LEFT
+			LEFT_BACK = FISH_LEFT_BACK
+			RIGHT = FISH_RIGHT
+			RIGHT_BACK = FISH_RIGHT_BACK
+		PHASES.lizard:
+			LEFT = LIZARD_LEFT
+			LEFT_BACK = LIZARD_LEFT_BACK
+			RIGHT = LIZARD_RIGHT
+			RIGHT_BACK = LIZARD_RIGHT_BACK
+		PHASES.primate:
+			LEFT = PRIMATE_LEFT
+			LEFT_BACK = PRIMATE_LEFT_BACK
+			RIGHT = PRIMATE_RIGHT
+			RIGHT_BACK = PRIMATE_RIGHT_BACK
 
 func apply_phase_traits():
 	# Reset defaults
