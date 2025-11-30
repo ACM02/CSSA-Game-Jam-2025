@@ -1,20 +1,24 @@
 extends "physics_entity.gd"
 
+@export var BLOB_DEAD: Texture2D
 @export var BLOB_LEFT: Texture2D
 @export var BLOB_RIGHT: Texture2D
 @export var BLOB_LEFT_BACK: Texture2D
 @export var BLOB_RIGHT_BACK: Texture2D
 
+@export var FISH_DEAD: Texture2D
 @export var FISH_LEFT: Texture2D
 @export var FISH_RIGHT: Texture2D
 @export var FISH_LEFT_BACK: Texture2D
 @export var FISH_RIGHT_BACK: Texture2D
 
+@export var LIZARD_DEAD: Texture2D
 @export var LIZARD_LEFT: Texture2D
 @export var LIZARD_RIGHT: Texture2D
 @export var LIZARD_LEFT_BACK: Texture2D
 @export var LIZARD_RIGHT_BACK: Texture2D
 
+@export var PRIMATE_DEAD: Texture2D
 @export var PRIMATE_LEFT: Texture2D
 @export var PRIMATE_RIGHT: Texture2D
 @export var PRIMATE_LEFT_BACK: Texture2D
@@ -24,6 +28,7 @@ extends "physics_entity.gd"
 @onready var RIGHT = BLOB_RIGHT
 @onready var LEFT_BACK = BLOB_LEFT_BACK
 @onready var RIGHT_BACK = BLOB_RIGHT_BACK
+@onready var DEAD = BLOB_DEAD
 
 var speed = 50
 var isFrontFacing = true
@@ -69,8 +74,8 @@ func _ready() -> void:
 	apply_phase_traits()
 
 func die():
-	print("Player died of death")
 	death.emit(DEATH_TYPE.ENEMY)
+	$Sprite2D.texture = DEAD
 
 func _physics_process(delta):
 	super._physics_process(delta)
@@ -217,6 +222,7 @@ func try_move(motion: Vector2, delta: float):
 				if stamina <= 0:
 					print("Player fainted from exhaustion")
 					death.emit(DEATH_TYPE.EXHAUSTION)
+					$Sprite2D.texture = DEAD
 				return
 		# If it's not a rock or the rock can't move:
 		# cancel movement completely
@@ -262,16 +268,19 @@ func apply_new_textures():
 			LEFT_BACK = FISH_LEFT_BACK
 			RIGHT = FISH_RIGHT
 			RIGHT_BACK = FISH_RIGHT_BACK
+			DEAD = FISH_DEAD
 		PHASES.lizard:
 			LEFT = LIZARD_LEFT
 			LEFT_BACK = LIZARD_LEFT_BACK
 			RIGHT = LIZARD_RIGHT
 			RIGHT_BACK = LIZARD_RIGHT_BACK
+			DEAD = LIZARD_DEAD
 		PHASES.primate:
 			LEFT = PRIMATE_LEFT
 			LEFT_BACK = PRIMATE_LEFT_BACK
 			RIGHT = PRIMATE_RIGHT
 			RIGHT_BACK = PRIMATE_RIGHT_BACK
+			DEAD = PRIMATE_DEAD
 	update_sprite_direction(Vector2(1,1))
 
 func apply_phase_traits():
@@ -317,3 +326,4 @@ func spawn(point):
 
 func _on_drowning_timer_timeout() -> void:
 	death.emit(DEATH_TYPE.DROWNING)
+	$Sprite2D.texture = DEAD
