@@ -103,6 +103,8 @@ func _on_player_death_with_reason(reason: int) -> void:
 				should_evolve = true
 				track_number = 2 # TODO: Make 4th track and put it here
 				
+				current_player_spawn = Vector2(1345, -501)
+				current_boulder_spawn = Vector2(1375, -522)
 			elif reason == player.DEATH_TYPE.MUD:
 				narrative_lines = [
 					"I was too slow.",
