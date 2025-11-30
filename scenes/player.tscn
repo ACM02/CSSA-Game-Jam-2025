@@ -1,15 +1,41 @@
-[gd_scene load_steps=4 format=3 uid="uid://ctvobuea5vyg5"]
+[gd_scene load_steps=8 format=3 uid="uid://ctvobuea5vyg5"]
 
 [ext_resource type="PackedScene" uid="uid://bgynqnydkh1xc" path="res://scenes/physics_entity.tscn" id="1_33152"]
 [ext_resource type="Script" uid="uid://hsc14irrcpxg" path="res://scripts/player.gd" id="2_dm58q"]
+[ext_resource type="Texture2D" uid="uid://dbtgk7fqd47pc" path="res://player_sprites/blob_player_left.png" id="3_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://df77t563oirkb" path="res://player_sprites/blob_player_right.png" id="4_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://bvm088nlqjwjo" path="res://player_sprites/blob_player_left_back.png" id="5_fjrip"]
+[ext_resource type="Texture2D" uid="uid://dar14arvx54no" path="res://player_sprites/blob_player_right_back.png" id="6_smehm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(130.00003, 130.00003)
+size = Vector2(22.000006, 21.000004)
 
 [node name="Player" instance=ExtResource("1_33152")]
-scale = Vector2(0.2, 0.2)
+scale = Vector2(0.8, 0.8)
 script = ExtResource("2_dm58q")
+BLOB_LEFT = ExtResource("3_tuyoq")
+BLOB_RIGHT = ExtResource("4_tuyoq")
+BLOB_LEFT_BACK = ExtResource("5_fjrip")
+BLOB_RIGHT_BACK = ExtResource("6_smehm")
+FISH_LEFT = null
+FISH_RIGHT = null
+FISH_LEFT_BACK = null
+FISH_RIGHT_BACK = null
+LIZARD_LEFT = null
+LIZARD_RIGHT = null
+LIZARD_LEFT_BACK = null
+LIZARD_RIGHT_BACK = null
+PRIMATE_LEFT = null
+PRIMATE_RIGHT = null
+PRIMATE_LEFT_BACK = null
+PRIMATE_RIGHT_BACK = null
 metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" parent="." index="0"]
+position = Vector2(-4.7683716e-07, 1.5000005)
+
+[node name="Sprite2D" parent="." index="1"]
+texture = ExtResource("3_tuyoq")
 
 [node name="Camera2D" type="Camera2D" parent="." index="2"]
 
@@ -20,7 +46,7 @@ one_shot = true
 [node name="PlayerHitBox" type="Area2D" parent="." index="4"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerHitBox" index="0"]
-position = Vector2(-2.2351737e-06, -2.533197e-06)
+position = Vector2(-1.1920929e-07, 1.5000001)
 scale = Vector2(0.9999997, 0.9999997)
 shape = SubResource("RectangleShape2D_g2els")
 

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://1xw3w6yx1i2u" path="res://icon.svg" id="1_um84r"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hmoqv"]
-size = Vector2(30.000006, 35.000004)
+size = Vector2(22, 21)
 
 [node name="PhysicsEntity" type="CharacterBody2D"]
 script = ExtResource("1_hmoqv")
