@@ -22,27 +22,34 @@ const MUD_TIME_LIMIT = 5
 var AFFECTED_BY_WATER = true
 var AFFECTED_BY_RAMP = true
 var AFFECTED_BY_MUD = true
+var AFFECTED_BY_MUD_STUCK = false
+var AFFECTED_BY_MUD_SLOW = false
 
 var mudCounter = 0
 
 func _ready() -> void:
 	ground_tilemap = get_tree().get_first_node_in_group("ground")
 
+# Returns a multiplier for movement speed (0.0 to 1.0) based on terrain and traits
+func get_speed_multiplier() -> float:
+	var atlas = currTile()
+	if atlas == MUD_ATLAS:
+		if AFFECTED_BY_MUD_STUCK:
+			return 0.05 # Essentially stuck, but barely twitching to show effort
+		if AFFECTED_BY_MUD_SLOW:
+			return 0.4 # Slowed movement
+	return 1.0
+
 func get_physics_effects() -> Vector2:
 	var atlas = currTile()
 
 	var effect_direction = Vector2.ZERO
 
-	if atlas == GROUND_ATLAS:
-		pass
-	elif atlas == WATER_ATLAS && AFFECTED_BY_WATER:
+	if atlas == WATER_ATLAS && AFFECTED_BY_WATER:
 		effect_direction = RIVER_FLOW * RIVER_SPEED
 	elif atlas == RAMP_ATLAS && AFFECTED_BY_RAMP:
 		effect_direction = RAMP_DIRECTION * RAMP_SPEED
-	elif atlas == MUD_ATLAS && AFFECTED_BY_MUD:
-		pass
-	elif atlas == BORDER_ATLAS:
-		pass
+
 	return effect_direction
 
 func currTile() -> Vector2i:

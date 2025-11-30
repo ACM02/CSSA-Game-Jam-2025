@@ -11,16 +11,25 @@ var stamina_regen_rate = 15.0
 var is_pushing: bool = false
 
 var drowning = false
+var can_drown_in_water = true
 
 signal health_change(new_health)
 signal stamina_change(new_stamina, is_colliding)
-signal death
+signal death(reason)
 
 enum PHASES {
 	blob = 0,
 	fish = 1,
 	lizard = 2,
 	primate = 3
+}
+
+enum DEATH_TYPE {
+	GENERIC,
+	DROWNING, # Water drowning
+	MUD,      # Mud sinking
+	ENEMY,
+	EXHAUSTION
 }
 
 @onready var phase = PHASES.blob
@@ -30,6 +39,7 @@ func _ready() -> void:
 	health_change.emit(100)
 	stamina_change.emit(100, false)
 	AFFECTED_BY_RAMP=false
+	apply_phase_traits()
 
 func damage(amount: int):
 	print("Player took " + str(amount) + " damage!")
@@ -37,21 +47,29 @@ func damage(amount: int):
 	health_change.emit(health)
 	if (health <= 0):
 		print("Player died of death")
-		death.emit()
+		death.emit(DEATH_TYPE.ENEMY)
 
 func _physics_process(delta):
 	super._physics_process(delta)
 	var motion = Vector2.ZERO
-	if phase < PHASES.fish && not drowning && isInWater():
+
+	# Water Drowning Logic
+	if can_drown_in_water and not drowning and isInWater():
 		drowning = true
 		$DrowningTimer.start()
+	elif not isInWater():
+		drowning = false
+		$DrowningTimer.stop()
 	
 	if not drowning:
 		var input_vec = Vector2(
 			Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
 			Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
 		).normalized()
-		motion = input_vec * speed * delta
+		
+		# Apply Mud/Terrain Speed Multiplier
+		var current_speed = speed * get_speed_multiplier()
+		motion = input_vec * current_speed * delta
 		
 	motion += (get_physics_effects() * delta)
 	
@@ -100,7 +118,7 @@ func try_move(motion: Vector2, delta: float):
 				# If no stamina, death
 				if stamina <= 0:
 					print("Player fainted from exhaustion")
-					death.emit()
+					death.emit(DEATH_TYPE.EXHAUSTION)
 				return
 		# If it's not a rock or the rock can't move:
 		# cancel movement completely
@@ -136,19 +154,46 @@ func is_touching_boulder() -> bool:
 func evolve():
 	if phase < PHASES.primate:
 		phase += 1
-	if (phase == PHASES.fish):
-		AFFECTED_BY_WATER = false
-		print("Became fish")
-	if (phase == PHASES.lizard):
-		AFFECTED_BY_MUD = false
-		mudCounter = 0
-		print("Became Lizard")
-	if (phase == PHASES.primate):
-		print("Became human")
+		apply_phase_traits()
+
+
+func apply_phase_traits():
+	# Reset defaults
+	AFFECTED_BY_WATER = true
+	AFFECTED_BY_MUD = true
+	
+	match phase:
+		PHASES.blob:
+			can_drown_in_water = true
+			AFFECTED_BY_MUD_STUCK = true # Stuck fully
+			AFFECTED_BY_MUD_SLOW = false
+			print("Form: Blob (Drowns in water, Stuck in mud)")
+			
+		PHASES.fish:
+			can_drown_in_water = false # Can breathe underwater
+			AFFECTED_BY_MUD_STUCK = true # Still stuck in mud
+			AFFECTED_BY_MUD_SLOW = false
+			print("Form: Fish (Swims, Stuck in mud)")
+			
+		PHASES.lizard:
+			can_drown_in_water = false 
+			AFFECTED_BY_MUD_STUCK = false # Can move
+			AFFECTED_BY_MUD_SLOW = true   # But slowed
+			print("Form: Frog/Lizard (Resists water, Slowed in mud)")
+			
+		PHASES.primate:
+			can_drown_in_water = false
+			AFFECTED_BY_MUD_STUCK = false
+			AFFECTED_BY_MUD_SLOW = true
+			print("Form: Primate")
+
 
 func spawn(point):
 	position = point
+	health = 100
+	stamina = max_stamina
+	health_change.emit(health)
+	stamina_change.emit(stamina, false)
 
 func _on_drowning_timer_timeout() -> void:
-	death.emit()
-	drowning = false
+	death.emit(DEATH_TYPE.DROWNING)

@@ -2,9 +2,18 @@ extends Node2D
 
 signal game_over
 
+@onready var player = $Player
+@onready var hud = $HUD
+@onready var start_point = $StartPoint
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	$Player.spawn($StartPoint.position)
+	player.spawn(start_point.position)
+	
+	# Connect signals
+	player.mud_death.connect(func(): _on_player_death_with_reason(player.DEATH_TYPE.MUD))
+	$Boulder.mud_death.connect(func(): _on_player_death_with_reason(player.DEATH_TYPE.MUD))
+	
 	# Play intro sequence
 	$HUD.play_narrative_sequence(["One must imagine Sisyphus happy."])
 	# Wait for the HUD to signal that the text is finished
@@ -16,28 +25,90 @@ func _process(delta: float) -> void:
 	pass
 
 
-func _on_player_death() -> void:
-#	Move player to start
-# 	Reset health
-#	Reset enemies?
+func _on_player_death_with_reason(reason: int) -> void:
+	var current_phase = player.phase
+	var narrative_lines = []
+	var should_evolve = false
+	
+	# Narrative Branching based on Script
+	match current_phase:
+		player.PHASES.BLOB:
+			if reason == player.DEATH_TYPE.DROWNING:
+				narrative_lines = [
+					"I drowned in my sorrows.",
+					"My lungs suffocate the way they always have.",
+					"But I must push the boulder to the top."
+				]
+				should_evolve = true
+			else:
+				narrative_lines = [
+					"I was too weak.",
+					"But I must push the boulder to the top."
+				]
+
+		player.PHASES.FISH:
+			if reason == player.DEATH_TYPE.MUD:
+				narrative_lines = [
+					"I foundered into the mire.",
+					"My legs crumble under the weight of it all.",
+					"But I must push the boulder to the top."
+				]
+				should_evolve = true
+			else:
+				narrative_lines = [
+					"I was too weak.",
+					"But I must push the boulder to the top."
+				]
+
+		player.PHASES.LIZARD:
+			if reason == player.DEATH_TYPE.ENEMY:
+				narrative_lines = [
+					"I was visited by the Grim Reaper.",
+					"They took from me an unbeating heart.",
+					"But I must push the boulder to the top."
+				]
+				should_evolve = true
+			elif reason == player.DEATH_TYPE.MUD:
+				narrative_lines = [
+					"I was too slow.",
+					"But I must push the boulder to the top."
+				]
+			else:
+				narrative_lines = [
+					"I was too weak.",
+					"But I must push the boulder to the top."
+				]
+
+		player.PHASES.PRIMATE:
+			if reason == player.DEATH_TYPE.EXHAUSTION:
+				narrative_lines = [
+					"I must push the boulder to the top.",
+					"There, I hope to find a cliff, where I can push the boulder off and destroy it once and for all.",
+					"But there is no cliff ahead. It keeps going.",
+					"I don't have the strength to push anymore."
+				]
+				# End game logic triggers here
+			else:
+				narrative_lines = [
+					"I was too weak.",
+					"But I must push the boulder to the top."
+				]
+
+	# Fallback
+	if narrative_lines.is_empty():
+		narrative_lines = ["One must imagine Sisyphus happy."]
+
 	var respawn_logic = func():
-		$Player.health = 100
-		$Player.emit_signal("health_change", 100)
-		$Player.evolve()
+		player.spawn(start_point.position)
+		$Boulder.position = Vector2(267, 33) 
+		$Boulder.mudCounter = 0
+		
+		if should_evolve:
+			player.evolve()
 
-		$Player.stamina = $Player.max_stamina
-		$Player.emit_signal("stamina_change", $Player.max_stamina, false)
+	hud.play_narrative_sequence(narrative_lines, 3.0, respawn_logic)
+	await hud.transition_finished
 
-	$HUD.play_narrative_sequence(["I drowned in my sorrows.\nMy lungs suffocate the way they always have."
-	, "But I must push the boulder to the top."], 3.0, respawn_logic)
-	await $HUD.transition_finished
-
-	print("Game over!")
-	game_over.emit()
-
-
-func _on_player_mud_death() -> void:
-	_on_player_death()
-
-func _on_boulder_mud_death() -> void:
-	_on_player_death()
+	# Check for endgame state
+	if current_phase == player.PHASES.PRIMATE and reason == player.DEATH_TYPE.EXHAUSTION:
+		print("End Game Sequence / Choices would appear here")
