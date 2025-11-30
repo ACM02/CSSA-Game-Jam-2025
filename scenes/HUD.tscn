@@ -5,7 +5,7 @@
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_qpvh6")
 
-[node name="HealthBar" type="ProgressBar" parent="."]
+[node name="StaminaBar" type="ProgressBar" parent="."]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -14,7 +14,7 @@ offset_right = 143.0
 offset_bottom = 51.0
 grow_horizontal = 2
 step = 1.0
-value = 20.0
+value = 100.0
 show_percentage = false
 
 [node name="NarrativeLayer" type="Control" parent="."]

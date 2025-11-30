@@ -5,6 +5,7 @@ signal transition_finished
 @onready var narrative_layer = $NarrativeLayer
 @onready var black_screen = $NarrativeLayer/BlackScreen
 @onready var narrative_label = $NarrativeLayer/NarrativeText
+@onready var stamina_bar = $StaminaBar
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -64,8 +65,8 @@ func _on_sequence_complete() -> void:
 	emit_signal("transition_finished")
 
 
-func _on_player_health_change(new_health: Variant) -> void:
-	$HealthBar.value = new_health
+func _on_player_stamina_change(new_stamina: Variant) -> void:
+	stamina_bar.value = new_stamina
 	
 
 func _on_main_game_over() -> void:

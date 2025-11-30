@@ -220,4 +220,4 @@ position = Vector2(230.66666, 50)
 
 [connection signal="game_over" from="." to="HUD" method="_on_main_game_over"]
 [connection signal="death" from="Player" to="." method="_on_player_death"]
-[connection signal="health_change" from="Player" to="HUD" method="_on_player_health_change"]
+[connection signal="stamina_change" from="Player" to="HUD" method="_on_player_stamina_change"]
