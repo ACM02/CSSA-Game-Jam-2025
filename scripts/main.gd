@@ -129,7 +129,7 @@ func _on_player_death_with_reason(reason: int) -> void:
 		if should_evolve:
 			player.evolve()
 
-	hud.play_narrative_sequence(narrative_lines, 3.0, respawn_logic)
+	hud.play_narrative_sequence(narrative_lines, 1.0, respawn_logic)
 	await hud.transition_finished
 
 	# Check for endgame state
