@@ -12,6 +12,9 @@ func _ready() -> void:
 	# Ensure HUD keeps running on pause
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
+	# Set the correct max value for the stamina bar
+	stamina_bar.max_value = 300
+	
 	# On game start, begin with the screen for introduction
 	narrative_label.modulate.a = 0.0
 	black_screen.modulate.a = 1.0
@@ -71,7 +74,7 @@ func _on_player_stamina_change(new_stamina: float, is_colliding: bool) -> void:
 	# Retrieve the stylebox to change its color
 	var style_box = stamina_bar.get_theme_stylebox("fill")
 	
-	if new_stamina < 20.0:
+	if new_stamina < 60.0:
 		style_box.bg_color = Color(0.9, 0.1, 0.1) # Red
 	elif is_colliding:
 		style_box.bg_color = Color(0.9, 0.9, 0.1) # Yellow
