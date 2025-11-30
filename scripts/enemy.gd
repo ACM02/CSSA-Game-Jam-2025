@@ -7,10 +7,11 @@ var attack_chargeup = 0
 var view_range = 256
 
 var isLunging = false
-
+var lungePoint = null
 var player: Node2D
 
-const ATTACK_CHARGE_TIME = 3
+const ATTACK_CHARGE_TIME = 4
+const LUNGE_POSITION_DESCISION_TIME = 1
 
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
@@ -23,17 +24,22 @@ func _physics_process(delta):
 	var dist = global_position.distance_to(player.global_position)
 	var direction = (player.global_position - global_position).normalized()
 	if dist <= view_range:
-		rotation = direction.angle()
+		if not lungePoint:
+			rotation = direction.angle()
+		else:
+			rotation = (global_position - lungePoint).angle()
 		if has_line_of_sight():
 			attack_chargeup += delta
 		else:
 			attack_chargeup = 0
+			lungePoint = null
 	else:
 		attack_chargeup = 0
+		lungePoint = null
 		
-	if attack_chargeup > 1:
-#		TODO: Play some animations as the chargeup is happening?
-		pass 
+	if not lungePoint && attack_chargeup > LUNGE_POSITION_DESCISION_TIME:
+		lungePoint = player.global_position
+		show_lunge_point(lungePoint)
 	
 	if attack_chargeup >= ATTACK_CHARGE_TIME:
 		attack_player()
@@ -46,13 +52,14 @@ func attack_player():
 	
 func lunge_to_player():
 	var tween := create_tween()
-	var target := player.global_position
-	var direction := (target - global_position)
-	var distanceFromPlayerCenter = 32
+	#var target := player.global_position
+	#var direction := (target - global_position)
+	#var distanceFromPlayerCenter = 32
 
-	var end_pos := global_position + direction - (direction.normalized() * int(distanceFromPlayerCenter))
+	#var end_pos := global_position + direction - (direction.normalized() * int(distanceFromPlayerCenter))
 
-	tween.tween_property(self, "global_position", end_pos, 0.80).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "global_position", lungePoint, 0.80).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	lungePoint = null
 
 
 func _on_attack_hitbox_area_entered(area: Area2D) -> void:
@@ -86,3 +93,14 @@ func has_line_of_sight() -> bool:
 
 func _on_lunge_active_timer_timeout() -> void:
 	isLunging = false
+
+@export var lunge_point_effect_scene: PackedScene
+
+func show_lunge_point(lunge_point: Vector2) -> void:
+	if not lunge_point_effect_scene:
+		return # safety check
+
+	print("Showing lunge point")
+	var effect_instance = lunge_point_effect_scene.instantiate()
+	effect_instance.global_position = lunge_point
+	get_tree().current_scene.add_child(effect_instance)

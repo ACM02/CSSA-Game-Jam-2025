@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://hsc14irrcpxg" path="res://scripts/player.gd" id="2_dm58q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(140, 140)
+size = Vector2(130.00003, 130.00003)
 
 [node name="Player" instance=ExtResource("1_33152")]
 scale = Vector2(0.2, 0.2)
@@ -20,8 +20,8 @@ one_shot = true
 [node name="PlayerHitBox" type="Area2D" parent="." index="4"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PlayerHitBox" index="0"]
-position = Vector2(7.152556e-06, 7.152556e-06)
-scale = Vector2(0.9999998, 0.9999998)
+position = Vector2(-2.2351737e-06, -2.533197e-06)
+scale = Vector2(0.9999997, 0.9999997)
 shape = SubResource("RectangleShape2D_g2els")
 
 [connection signal="timeout" from="DrowningTimer" to="." method="_on_drowning_timer_timeout"]

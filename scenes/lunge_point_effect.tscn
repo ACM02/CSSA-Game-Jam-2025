@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://cyokvgwt1skq0"]
+
+[ext_resource type="Texture2D" uid="uid://cc633xpi3gcr4" path="res://sample tileset/separated images/tile_075.png" id="1_81fy2"]
+[ext_resource type="Script" uid="uid://cvmq5lo5obt20" path="res://scripts/lunge_point_effect.gd" id="2_785hx"]
+
+[node name="Sprite2D" type="Sprite2D"]
+top_level = true
+texture = ExtResource("1_81fy2")
+script = ExtResource("2_785hx")
