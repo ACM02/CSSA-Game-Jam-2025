@@ -13,6 +13,9 @@ var is_pushing: bool = false
 var drowning = false
 var can_drown_in_water = true
 
+var sink_position: Vector2 = Vector2.ZERO
+var sink_accum: float = 0.0
+
 signal health_change(new_health)
 signal stamina_change(new_stamina, is_colliding)
 signal death(reason)
@@ -34,12 +37,37 @@ enum DEATH_TYPE {
 
 @onready var phase = PHASES.blob
 
+# This shader clips any pixel below a specific Y line (sink_y)
+const SINK_SHADER_CODE = """
+shader_type canvas_item;
+uniform float sink_y = 1000.0; // Start below the sprite
+
+varying float local_y;
+
+void vertex() {
+	local_y = VERTEX.y;
+}
+
+void fragment() {
+	if (local_y > sink_y) {
+		discard;
+	}
+}
+"""
+
 func _ready() -> void:
 	super._ready()
 	health_change.emit(100)
 	stamina_change.emit(100, false)
 	AFFECTED_BY_RAMP=false
 	apply_phase_traits()
+	
+	# Initialize the sinking shader
+	var mat = ShaderMaterial.new()
+	var shader = Shader.new()
+	shader.code = SINK_SHADER_CODE
+	mat.shader = shader
+	$Sprite2D.material = mat
 
 func damage(amount: int):
 	print("Player took " + str(amount) + " damage!")
@@ -57,8 +85,16 @@ func _physics_process(delta):
 	if can_drown_in_water and not drowning and isInWater():
 		drowning = true
 		$DrowningTimer.start()
+		
+		# Get the grid coordinate of the water tile we just touched
+		var map_pos = ground_tilemap.local_to_map(ground_tilemap.to_local(global_position))
+		var tile_center_local = ground_tilemap.map_to_local(map_pos)
+		
+		# Lock the target position in Global space
+		sink_position = ground_tilemap.to_global(tile_center_local)
+		sink_accum = 0.0
+
 	elif not isInWater() and not drowning: 
-		# Only reset if we naturally walked out, NOT if we are already dying
 		drowning = false
 		$DrowningTimer.stop()
 	
@@ -75,25 +111,34 @@ func _physics_process(delta):
 		# ONLY apply river/slope physics if we are NOT drowning
 		motion += (get_physics_effects() * delta)
 	else:
-		# VISUAL TRICK: Sinking effect
+		var sink_speed = 15.0 # How fast pixels disappear
+
 		# Slowly move the sprite down relative to the collision shape
-		$Sprite2D.position.y += 10 * delta
+		$Sprite2D.position.y += sink_speed * delta
+		sink_accum += sink_speed * delta
+		
+		# The bottom of a centered sprite is at height/2.
+		# As we move down by sink_accum, the water line moves UP the sprite by sink_accum.
+		var sprite_height = $Sprite2D.get_rect().size.y
+		var water_line_y = (sprite_height / 2.0) - sink_accum
+		
+		# 4. Apply to shader
+		$Sprite2D.material.set_shader_parameter("sink_y", water_line_y)
 
-		# MECHANIC: Pull player to the center
-		# 1. Get local center of tile
-		var tile_center_local = ground_tilemap.map_to_local(currTile())
-		# 2. Convert to global space to match player's global_position
-		var tile_center_global = ground_tilemap.to_global(tile_center_local)
-
-		var direction_to_center = (tile_center_global - global_position).normalized()
-		motion = direction_to_center * 10 * delta
+		# PHYSICS: Suction towards center
+		var direction_to_center = (sink_position - global_position).normalized()
+		var dist = global_position.distance_to(sink_position)
+		
+		# Move MANUALLY (ignore collisions/walls while dying)
+		if dist > 2.0:
+			global_position += direction_to_center * 20 * delta
 	
 	# Reset pushing state for this frame; it will be set true in try_move if we push
 	is_pushing = false
 	
 	#print("Final player direction: " + str(motion))
 	# Try move using test_move, not move_and_collide
-	if motion != Vector2.ZERO:
+	if not drowning and motion != Vector2.ZERO:
 		try_move(motion, delta)
 		
 	# Stamina regeneration
@@ -212,7 +257,9 @@ func spawn(point):
 	
 	drowning = false
 	$DrowningTimer.stop()
-	$Sprite2D.position = Vector2.ZERO # Reset the sinking visual effect
+	# Reset the sinking visual effect
+	$Sprite2D.position = Vector2.ZERO
+	$Sprite2D.material.set_shader_parameter("sink_y", 1000.0)
 
 func _on_drowning_timer_timeout() -> void:
 	death.emit(DEATH_TYPE.DROWNING)
