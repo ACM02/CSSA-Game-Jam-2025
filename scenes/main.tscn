@@ -210,7 +210,6 @@ y_sort_origin = 1
 
 [node name="Enemy" parent="." instance=ExtResource("7_o6xl0")]
 position = Vector2(190.66669, 138.33333)
-scale = Vector2(0.20000002, 0.20000002)
 lunge_point_effect_scene = ExtResource("7_85g3d")
 
 [node name="Boulder" parent="." instance=ExtResource("9_85g3d")]

@@ -27,7 +27,7 @@ func _physics_process(delta):
 		if not lungePoint:
 			rotation = direction.angle()
 		else:
-			rotation = (global_position - lungePoint).angle()
+			rotation = (global_position - lungePoint).angle() - PI
 		if has_line_of_sight():
 			attack_chargeup += delta
 		else:
