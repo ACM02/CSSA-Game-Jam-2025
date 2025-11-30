@@ -6,8 +6,18 @@ signal game_over
 @onready var hud = $HUD
 @onready var start_point = $StartPoint
 
+var track_number = 0
+
+const tracks = [
+	preload("res://music/stage 1.wav"),
+	preload("res://music/stage 2.wav"),
+	preload("res://music/stage 3.wav")
+]
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	AudioPlayer.play_music(tracks[track_number], 2.0)
+	
 	player.spawn(start_point.position)
 	
 	# Connect signals
@@ -21,7 +31,7 @@ func _ready() -> void:
 	$HUD.play_narrative_sequence(["One must imagine Sisyphus happy."])
 	# Wait for the HUD to signal that the text is finished
 	await $HUD.transition_finished
-
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -43,6 +53,7 @@ func _on_player_death_with_reason(reason: int) -> void:
 					"But I must push the boulder to the top."
 				]
 				should_evolve = true
+				track_number = 1
 			else:
 				narrative_lines = [
 					"I was too weak.",
@@ -57,6 +68,8 @@ func _on_player_death_with_reason(reason: int) -> void:
 					"But I must push the boulder to the top."
 				]
 				should_evolve = true
+				track_number = 2
+				
 			else:
 				narrative_lines = [
 					"I was too weak.",
@@ -71,6 +84,8 @@ func _on_player_death_with_reason(reason: int) -> void:
 					"But I must push the boulder to the top."
 				]
 				should_evolve = true
+				track_number = 2 # TODO: Make 4th track and put it here
+				
 			elif reason == player.DEATH_TYPE.MUD:
 				narrative_lines = [
 					"I was too slow.",
@@ -100,6 +115,11 @@ func _on_player_death_with_reason(reason: int) -> void:
 	# Fallback
 	if narrative_lines.is_empty():
 		narrative_lines = ["One must imagine Sisyphus happy."]
+
+	if should_evolve:
+		print("Switching to track " + str(track_number))
+		AudioPlayer.play_music(tracks[track_number], 7.0)
+		
 
 	var respawn_logic = func():
 		player.spawn(start_point.position)

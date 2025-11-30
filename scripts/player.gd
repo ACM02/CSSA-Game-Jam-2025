@@ -189,7 +189,6 @@ func apply_phase_traits():
 	# Reset defaults
 	AFFECTED_BY_WATER = true
 	AFFECTED_BY_MUD = true
-	
 	match phase:
 		PHASES.blob:
 			can_drown_in_water = true
