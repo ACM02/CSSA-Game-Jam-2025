@@ -37,8 +37,8 @@ var isRightFacing = false
 # Stamina System
 var max_stamina: float = 300.0
 var stamina: float = 300.0
-var stamina_drain_rate = 30.0
-var stamina_regen_rate = 15.0
+var stamina_drain_rate = 45.0
+var stamina_regen_rate = 30.0
 var is_pushing: bool = false
 
 var drowning = false
