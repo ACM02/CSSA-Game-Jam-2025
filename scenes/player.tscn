@@ -8,3 +8,9 @@ scale = Vector2(0.2, 0.2)
 script = ExtResource("2_dm58q")
 
 [node name="Camera2D" type="Camera2D" parent="." index="2"]
+
+[node name="DrowningTimer" type="Timer" parent="." index="3"]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="DrowningTimer" to="." method="_on_drowning_timer_timeout"]
