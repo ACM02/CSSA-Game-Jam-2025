@@ -110,5 +110,5 @@ func _on_player_death_with_reason(reason: int) -> void:
 	await hud.transition_finished
 
 	# Check for endgame state
-	if current_phase == player.PHASES.PRIMATE and reason == player.DEATH_TYPE.EXHAUSTION:
+	if current_phase == player.PHASES.primate and reason == player.DEATH_TYPE.EXHAUSTION:
 		print("End Game Sequence / Choices would appear here")
