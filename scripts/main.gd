@@ -32,7 +32,7 @@ func _on_player_death_with_reason(reason: int) -> void:
 	
 	# Narrative Branching based on Script
 	match current_phase:
-		player.PHASES.BLOB:
+		player.PHASES.blob:
 			if reason == player.DEATH_TYPE.DROWNING:
 				narrative_lines = [
 					"I drowned in my sorrows.",
@@ -46,7 +46,7 @@ func _on_player_death_with_reason(reason: int) -> void:
 					"But I must push the boulder to the top."
 				]
 
-		player.PHASES.FISH:
+		player.PHASES.fish:
 			if reason == player.DEATH_TYPE.MUD:
 				narrative_lines = [
 					"I foundered into the mire.",
@@ -60,7 +60,7 @@ func _on_player_death_with_reason(reason: int) -> void:
 					"But I must push the boulder to the top."
 				]
 
-		player.PHASES.LIZARD:
+		player.PHASES.lizard:
 			if reason == player.DEATH_TYPE.ENEMY:
 				narrative_lines = [
 					"I was visited by the Grim Reaper.",
@@ -79,7 +79,7 @@ func _on_player_death_with_reason(reason: int) -> void:
 					"But I must push the boulder to the top."
 				]
 
-		player.PHASES.PRIMATE:
+		player.PHASES.primate:
 			if reason == player.DEATH_TYPE.EXHAUSTION:
 				narrative_lines = [
 					"I must push the boulder to the top.",
