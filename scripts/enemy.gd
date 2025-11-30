@@ -58,7 +58,7 @@ func lunge_to_player():
 func _on_attack_hitbox_area_entered(area: Area2D) -> void:
 	if isLunging && area.name == "PlayerHitBox":
 		print("Hit player")
-		player.damage(attack_damage)
+		player.die()
 	if area.name == "BoulderHitBox":
 		print("Hit Boulder")
 		queue_free()

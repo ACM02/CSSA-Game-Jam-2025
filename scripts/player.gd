@@ -1,7 +1,6 @@
 extends "physics_entity.gd"
 
 var speed = 50
-var health = 100
 
 # Stamina System
 var max_stamina: float = 100.0
@@ -12,7 +11,6 @@ var is_pushing: bool = false
 
 var drowning = false
 
-signal health_change(new_health)
 signal stamina_change(new_stamina, is_colliding)
 signal death
 
@@ -27,17 +25,12 @@ enum PHASES {
 
 func _ready() -> void:
 	super._ready()
-	health_change.emit(100)
 	stamina_change.emit(100, false)
 	AFFECTED_BY_RAMP=false
 
-func damage(amount: int):
-	print("Player took " + str(amount) + " damage!")
-	health -= amount
-	health_change.emit(health)
-	if (health <= 0):
-		print("Player died of death")
-		death.emit()
+func die():
+	print("Player died of death")
+	death.emit()
 
 func _physics_process(delta):
 	super._physics_process(delta)
