@@ -41,7 +41,13 @@ func _ready() -> void:
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	pass
+	if player and has_node("Boulder"):
+		var dist = player.global_position.distance_to($Boulder.global_position)
+		# 600px is roughly half screen width (assuming 1152 width)
+		if dist > 600.0:
+			_on_player_death_with_reason(player.DEATH_TYPE.SEPARATION)
+			# Stop checking to prevent multiple triggers until respawn
+			set_process(false)
 
 
 func _on_player_death_with_reason(reason: int) -> void:
@@ -134,6 +140,8 @@ func _on_player_death_with_reason(reason: int) -> void:
 		player.spawn(current_player_spawn)
 		$Boulder.position = current_boulder_spawn 
 		$Boulder.mudCounter = 0
+		
+		set_process(true)
 		
 		if should_evolve:
 			player.evolve()

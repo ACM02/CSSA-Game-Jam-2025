@@ -62,7 +62,8 @@ enum DEATH_TYPE {
 	DROWNING, # Water drowning
 	MUD,      # Mud sinking
 	ENEMY,
-	EXHAUSTION
+	EXHAUSTION,
+	SEPARATION
 }
 
 @onready var phase = PHASES.blob
