@@ -11,7 +11,7 @@ const WATER_SE_ATLAS = Vector2i(1, 0)
 const RAMP_ATLAS = Vector2i(2, 0)
 const MUD_ATLAS = Vector2i(3, 0)
 const BORDER_ATLAS = Vector2i(4, 0)
-const WATER_NW_ATLAS = Vector2i(5, 0)
+const WATER_NW_ATLAS = Vector2i(6, 0)
 
 const RAMP_SPEED = 50
 var RAMP_DIRECTION = Vector2(-1, 1).normalized()

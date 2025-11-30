@@ -24,7 +24,8 @@ func place_boundaries():
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	place_boundaries()
+	pass
+	# place_boundaries()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

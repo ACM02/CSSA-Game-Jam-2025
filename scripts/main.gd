@@ -14,8 +14,8 @@ func _ready() -> void:
 	player.mud_death.connect(func(): _on_player_death_with_reason(player.DEATH_TYPE.MUD))
 	$Boulder.mud_death.connect(func(): _on_player_death_with_reason(player.DEATH_TYPE.MUD))
 	
-	player.void_death.connect(func(): _on_player_death_with_reason(player.DEATH_TYPE.DROWNING))
-	$Boulder.void_death.connect(func(): _on_player_death_with_reason(player.DEATH_TYPE.DROWNING))
+	player.void_death.connect(func(): _on_player_death_with_reason(player.DEATH_TYPE.EXHAUSTION))
+	$Boulder.void_death.connect(func(): _on_player_death_with_reason(player.DEATH_TYPE.EXHAUSTION))
 
 	# Play intro sequence
 	$HUD.play_narrative_sequence(["One must imagine Sisyphus happy."])
