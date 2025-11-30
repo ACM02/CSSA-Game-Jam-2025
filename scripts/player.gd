@@ -3,12 +3,21 @@ extends "physics_entity.gd"
 var speed = 50
 var health = 100
 
+# Stamina System
+var max_stamina: float = 100.0
+var stamina: float = 100.0
+var stamina_drain_rate = 30.0
+var stamina_regen_rate = 15.0
+var is_pushing: bool = false
+
 signal health_change(new_health)
+signal stamina_change(new_stamina)
 signal death
 
 func _ready() -> void:
 	super._ready()
 	health_change.emit(100)
+	stamina_change.emit(100)
 	AFFECTED_BY_RAMP=false
 
 func damage(amount: int):
@@ -27,12 +36,24 @@ func _physics_process(delta):
 
 	var motion = input_vec * speed * delta
 	motion += (get_physics_effects() * delta)
+	
+	# Reset pushing state for this frame; it will be set true in try_move if we push
+	is_pushing = false
+	
 	#print("Final player direction: " + str(motion))
 	# Try move using test_move, not move_and_collide
 	if motion != Vector2.ZERO:
-		try_move(motion)
+		try_move(motion, delta)
+		
+	# Stamina regeneration
+	# Recovers when not pushing a boulder
+	if not is_pushing and stamina < max_stamina:
+		stamina += stamina_regen_rate * delta
+		if stamina > max_stamina:
+			stamina = max_stamina
+		stamina_change.emit(stamina)
 
-func try_move(motion: Vector2):
+func try_move(motion: Vector2, delta: float):
 	#print("Trying to move: " + str(motion))
 	var space = get_world_2d().direct_space_state
 	var collision = move_and_collide(motion)
@@ -42,7 +63,17 @@ func try_move(motion: Vector2):
 
 		if collider is Boudler:
 			if collider.try_push(motion):
+				is_pushing = true
 				translate(motion)
+				
+				# Drain stamina
+				stamina -= stamina_drain_rate * delta
+				stamina_change.emit(stamina)
+				
+				# If no stamina, death
+				if stamina <= 0:
+					print("Player fainted from exhaustion")
+					death.emit()
 				return
 		# If it's not a rock or the rock can't move:
 		# cancel movement completely
