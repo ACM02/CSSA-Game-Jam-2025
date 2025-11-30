@@ -37,37 +37,12 @@ enum DEATH_TYPE {
 
 @onready var phase = PHASES.blob
 
-# This shader clips any pixel below a specific Y line (sink_y)
-const SINK_SHADER_CODE = """
-shader_type canvas_item;
-uniform float sink_y = 1000.0; // Start below the sprite
-
-varying float local_y;
-
-void vertex() {
-	local_y = VERTEX.y;
-}
-
-void fragment() {
-	if (local_y > sink_y) {
-		discard;
-	}
-}
-"""
-
 func _ready() -> void:
 	super._ready()
 	health_change.emit(100)
 	stamina_change.emit(100, false)
 	AFFECTED_BY_RAMP=false
 	apply_phase_traits()
-	
-	# Initialize the sinking shader
-	var mat = ShaderMaterial.new()
-	var shader = Shader.new()
-	shader.code = SINK_SHADER_CODE
-	mat.shader = shader
-	$Sprite2D.material = mat
 
 func damage(amount: int):
 	print("Player took " + str(amount) + " damage!")
