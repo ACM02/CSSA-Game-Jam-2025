@@ -8,7 +8,9 @@ const speed = 80
 var touching_player := false
 
 func try_push(vector):
-	move_and_collide(vector)
+	var collision = move_and_collide(vector)
+	
+	return collision == null
 
 func _physics_process(delta: float) -> void:
 	var physics_effects = get_physics_effects()
