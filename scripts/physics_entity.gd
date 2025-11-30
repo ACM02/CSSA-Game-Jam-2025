@@ -20,7 +20,7 @@ var FLOW_SE = Vector2(1, 0.5).normalized()
 var FLOW_NW = Vector2(-1, -0.5).normalized()
 const RIVER_SPEED = 40                 # tweak as needed
 
-var mud_time_limit = 5.0
+var mud_time_limit = 3.0
 
 var AFFECTED_BY_WATER = true
 var AFFECTED_BY_RAMP = true
@@ -76,13 +76,13 @@ func get_physics_effects() -> Vector2:
 
 	var effect_direction = Vector2.ZERO
 
-	if AFFECTED_BY_WATER:
+	if atlas == RAMP_ATLAS && AFFECTED_BY_RAMP:
+		effect_direction = RAMP_DIRECTION * RAMP_SPEED
+	elif AFFECTED_BY_WATER:
 		if atlas == WATER_SE_ATLAS:
 			effect_direction = FLOW_SE * RIVER_SPEED
 		elif atlas == WATER_NW_ATLAS:
 			effect_direction = FLOW_NW * RIVER_SPEED
-	elif atlas == RAMP_ATLAS && AFFECTED_BY_RAMP:
-		effect_direction = RAMP_DIRECTION * RAMP_SPEED
 
 	return effect_direction
 
