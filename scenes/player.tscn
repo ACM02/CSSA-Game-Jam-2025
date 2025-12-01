@@ -52,12 +52,14 @@ PRIMATE_RIGHT_BACK = ExtResource("18_dt7fs")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" parent="." index="0"]
-position = Vector2(-4.7683716e-07, 1.5000005)
+position = Vector2(-4.7683707e-07, 1.5000002)
+scale = Vector2(0.9999998, 0.9999998)
 
 [node name="Sprite2D" parent="." index="1"]
 texture = ExtResource("3_tuyoq")
 
 [node name="Camera2D" type="Camera2D" parent="." index="2"]
+zoom = Vector2(2.5, 2.5)
 
 [node name="DrowningTimer" type="Timer" parent="." index="3"]
 wait_time = 3.0

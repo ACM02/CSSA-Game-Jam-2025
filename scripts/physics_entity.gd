@@ -6,21 +6,21 @@ signal void_death
 
 var ground_tilemap: TileMapLayer
 
-const GROUND_ATLAS = Vector2i(0, 0)
-const WATER_SE_ATLAS = Vector2i(1, 0)
-const RAMP_ATLAS = Vector2i(2, 0)
-const MUD_ATLAS = Vector2i(3, 0)
-const BORDER_ATLAS = Vector2i(4, 0)
-const WATER_NW_ATLAS = Vector2i(6, 0)
+const GROUND_ATLAS = Vector2i(0, 2)
+const WATER_SE_ATLAS = Vector2i(10, 8)
+const RAMP_ATLAS = Vector2i(0, 0)
+const MUD_ATLAS = Vector2i(1, 1)
+const BORDER_ATLAS = Vector2i(0, 5)
+const WATER_NW_ATLAS = Vector2i(0, 1)
 
-const RAMP_SPEED = 50
+const RAMP_SPEED = 100
 var RAMP_DIRECTION = Vector2(-1, 1).normalized()
 
 var FLOW_SE = Vector2(1, 0.5).normalized()
 var FLOW_NW = Vector2(-1, -0.5).normalized()
-const RIVER_SPEED = 30                 # tweak as needed
+const RIVER_SPEED = 40                 # tweak as needed
 
-const MUD_TIME_LIMIT = 5
+var mud_time_limit = 3.0
 
 var AFFECTED_BY_WATER = true
 var AFFECTED_BY_RAMP = true
@@ -76,13 +76,13 @@ func get_physics_effects() -> Vector2:
 
 	var effect_direction = Vector2.ZERO
 
-	if AFFECTED_BY_WATER:
+	if atlas == RAMP_ATLAS && AFFECTED_BY_RAMP:
+		effect_direction = RAMP_DIRECTION * RAMP_SPEED
+	elif AFFECTED_BY_WATER:
 		if atlas == WATER_SE_ATLAS:
 			effect_direction = FLOW_SE * RIVER_SPEED
 		elif atlas == WATER_NW_ATLAS:
 			effect_direction = FLOW_NW * RIVER_SPEED
-	elif atlas == RAMP_ATLAS && AFFECTED_BY_RAMP:
-		effect_direction = RAMP_DIRECTION * RAMP_SPEED
 
 	return effect_direction
 
@@ -118,7 +118,7 @@ func _physics_process(delta: float) -> void:
 
 		# --- VISUAL SINKING LOGIC ---
 		if has_node("Sprite2D"):
-			var percent_sunk = clamp(mudCounter / MUD_TIME_LIMIT, 0.0, 1.0)
+			var percent_sunk = clamp(mudCounter / mud_time_limit, 0.0, 1.0)
 			var max_sink_pixels = 15.0 # How deep they go visually
 			
 			# 1. Move sprite down physically
@@ -133,7 +133,7 @@ func _physics_process(delta: float) -> void:
 			var current_sink_y = bottom_y - (max_sink_pixels * percent_sunk)
 			$Sprite2D.material.set_shader_parameter("sink_y", current_sink_y)
 
-		if mudCounter >= MUD_TIME_LIMIT:
+		if mudCounter >= mud_time_limit:
 			mud_death.emit()
 			mudCounter = 0
 	else:

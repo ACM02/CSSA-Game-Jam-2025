@@ -10,7 +10,7 @@ var isLunging = false
 var lungePoint = null
 var player: Node2D
 
-const ATTACK_CHARGE_TIME = 4
+const ATTACK_CHARGE_TIME = 2
 const LUNGE_POSITION_DESCISION_TIME = 1
 
 func _ready():
@@ -52,11 +52,10 @@ func attack_player():
 	
 func lunge_to_player():
 	var tween := create_tween()
-	#var target := player.global_position
-	#var direction := (target - global_position)
-	#var distanceFromPlayerCenter = 32
-
-	#var end_pos := global_position + direction - (direction.normalized() * int(distanceFromPlayerCenter))
+	
+	# Calculate duration based on speed of 200 px/sec
+	var dist = global_position.distance_to(lungePoint)
+	var duration = dist / 200.0
 
 	tween.tween_property(self, "global_position", lungePoint, 0.80).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
 	lungePoint = null

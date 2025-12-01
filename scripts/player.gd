@@ -30,15 +30,15 @@ extends "physics_entity.gd"
 @onready var RIGHT_BACK = BLOB_RIGHT_BACK
 @onready var DEAD = BLOB_DEAD
 
-var speed = 50
+var speed = 100
 var isFrontFacing = true
 var isRightFacing = false
 
 # Stamina System
-var max_stamina: float = 100.0
-var stamina: float = 100.0
-var stamina_drain_rate = 30.0
-var stamina_regen_rate = 15.0
+var max_stamina: float = 300.0
+var stamina: float = 300.0
+var stamina_drain_rate = 90.0
+var stamina_regen_rate = 105.0
 var is_pushing: bool = false
 
 var drowning = false
@@ -62,14 +62,15 @@ enum DEATH_TYPE {
 	DROWNING, # Water drowning
 	MUD,      # Mud sinking
 	ENEMY,
-	EXHAUSTION
+	EXHAUSTION,
+	SEPARATION
 }
 
 @onready var phase = PHASES.blob
 
 func _ready() -> void:
 	super._ready()
-	stamina_change.emit(100, false)
+	stamina_change.emit(stamina, false)
 	AFFECTED_BY_RAMP=false
 	apply_phase_traits()
 
@@ -210,9 +211,12 @@ func try_move(motion: Vector2, delta: float):
 		var collider = collision.get_collider()
 
 		if collider is Boudler:
-			if collider.try_push(motion):
+			# Override speed for pushing: Fixed at 50 px/s (Scale 1)
+			var push_velocity = motion.normalized() * 50.0 * delta
+			
+			if collider.try_push(push_velocity):
 				is_pushing = true
-				translate(motion)
+				translate(push_velocity)
 				
 				# Drain stamina
 				stamina -= stamina_drain_rate * delta
@@ -304,12 +308,14 @@ func apply_phase_traits():
 			can_drown_in_water = false 
 			AFFECTED_BY_MUD_STUCK = false # Can move
 			AFFECTED_BY_MUD_SLOW = true   # But slowed
+			mud_time_limit = 10.0         # Survives longer in mud
 			print("Form: Frog/Lizard (Resists water, Slowed in mud)")
 			
 		PHASES.primate:
 			can_drown_in_water = false
 			AFFECTED_BY_MUD_STUCK = false
 			AFFECTED_BY_MUD_SLOW = true
+			mud_time_limit = 10.0
 			print("Form: Primate")
 
 
