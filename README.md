@@ -5,6 +5,8 @@ Our submission for the [2025 CSSA Game Jam](https://itch.io/jam/cssa-game-jam-20
 
 "Imagine" is a 2D isometric game built to represent the struggles in life. Much like in the classic tale of sisyphus, this player must push a boulder up a hill. Throughout the game your character will face several challenges when trying to get the boulder to the top. These challenges will require you to adapt to overcome them and evolve into something new. 
 
+You can find the script for the game [here](/docs/script.md) which describes the story in greater detail.
+
 # How to play
 
 If you want to experience our game, you can:
